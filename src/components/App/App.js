@@ -95,7 +95,7 @@ class App extends React.Component {
 
   createCharacter() {
 	  const characters = [...this.state.characters];
-	  characters.push({name: 'New Character'});
+	  characters.push({name: 'Új karakter'});
     this.setState({ characters }, this.storeStates);
   }
 
@@ -112,6 +112,50 @@ class App extends React.Component {
   setCharacterProperty(key, value) {
     let characters = [...this.state.characters];
     _.set(characters, `${this.state.characterIndex}.${key}`, value);
+    this.setState({ characters }, this.storeStates);
+  }
+
+  addEquipment() {
+    let characters = [...this.state.characters];
+    const equipmentsPath = `${this.state.characterIndex}.equipments`;
+    let equipments = _.get(characters, equipmentsPath) || [];
+    equipments.push({
+      name: '',
+      quantity: '',
+      placing: ''
+    });
+    _.set(characters, equipmentsPath, equipments);
+    this.setState({ characters }, this.storeStates);
+  }
+
+  removeEquipment(key) {
+    let characters = [...this.state.characters];
+    const equipmentsPath = `${this.state.characterIndex}.equipments`;
+    let equipments = _.get(characters, equipmentsPath) || [];
+    equipments.splice(key, 1);
+    _.set(characters, equipmentsPath, equipments);
+    this.setState({ characters }, this.storeStates);
+  }
+
+  addEducation() {
+    let characters = [...this.state.characters];
+    const educationsPath = `${this.state.characterIndex}.educations`;
+    let educations = _.get(characters, educationsPath) || [];
+    educations.push({
+      name: '',
+      point: '',
+      degree: ''
+    });
+    _.set(characters, educationsPath, educations);
+    this.setState({ characters }, this.storeStates);
+  }
+
+  removeEducation(key) {
+    let characters = [...this.state.characters];
+    const educationsPath = `${this.state.characterIndex}.educations`;
+    let educations = _.get(characters, educationsPath) || [];
+    educations.splice(key, 1);
+    _.set(characters, educationsPath, educations);
     this.setState({ characters }, this.storeStates);
   }
 
@@ -158,6 +202,11 @@ class App extends React.Component {
                   <i className={'bi bi-bag-fill'}></i>
                 </div>
               </li>
+              <li className="nav-item">
+                <div className={`nav-link ${this.state.menuIndex === 5 ? 'active' : ''}`} onClick={() => reactSwipeEl.slide(5, 300)}>
+                  <i className={'bi bi-sticky-fill'}></i>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
@@ -197,7 +246,7 @@ class App extends React.Component {
                 })}
                 <div>
                   <button type="button" className={'btn btn-secondary'} onClick={() => this.createCharacter()}>
-                    <i className={'bi bi-plus-circle-fill'}></i> New Character
+                    <i className={'bi bi-plus-circle-fill'}></i> Új karakter
                   </button>
                 </div>
               </div>
@@ -543,8 +592,145 @@ class App extends React.Component {
                 </div>
               </div>
               <div className={'panel'}>Fegyverek</div>
-              <div className={'panel'}>Képzettség</div>
-              <div className={'panel'}>Felszerelés</div>
+              <div className={'panel'}>
+
+                <div className="separator">Képzettség pontok</div>
+
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">KP/szint</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.kpPerLevel || ''} onChange={event => this.setCharacterProperty('kpPerLevel', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Jelenlegi KP</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.currentKP || ''} onChange={event => this.setCharacterProperty('currentKP', event.target.value)}/>
+                  </div>
+                </div>
+
+                <div className="separator">Képzettségek</div>
+
+                <table className={'table-sm table-striped w-100'}>
+                  <tr>
+                    <th>Képzettség</th>
+                    <th>Pont</th>
+                    <th>Fok / %</th>
+                    <th>Akció</th>
+                  </tr>
+                  {Object.keys(character.educations || []).map(key => {
+                    const education = character.educations[key];
+                    return (
+                      <tr>
+                        <td>
+                          <input className={'equipment-input'} type="text" value={education.name}
+                                 onChange={event => this.setCharacterProperty(`educations.${key}.name`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'equipment-input'} type="text" value={education.point}
+                                 onChange={event => this.setCharacterProperty(`educations.${key}.point`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'equipment-input'} type="text" value={education.degree}
+                                 onChange={event => this.setCharacterProperty(`educations.${key}.degree`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <button type="button" className={'btn btn-sm btn-danger'} onClick={() => {
+                            const isConfirmed = window.confirm('Are you sure you want to remove this education?');
+                            if (isConfirmed) {
+                              this.removeEducation(key)
+                            }
+                          }}>
+                            <i className={'bi bi-dash-circle-fill'}></i>
+                          </button>
+                        </td>
+                      </tr>
+                    )})}
+                </table>
+                <button type="button" className={'btn btn-secondary mt-2'} onClick={() => this.addEducation()}>
+                  <i className={'bi bi-plus-circle-fill'}></i> Képzettség hozzáadása
+                </button>
+              </div>
+              <div className={'panel'}>
+                <div className="separator">Vagyon</div>
+
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Arany</div>
+                  <div className="align-self-end">
+                    <input type="number" value={character.gold || ''} onChange={event => this.setCharacterProperty('gold', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Ezüst</div>
+                  <div className="align-self-end">
+                    <input type="number" value={character.silver || ''} onChange={event => this.setCharacterProperty('silver', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Réz</div>
+                  <div className="align-self-end">
+                    <input type="number" value={character.copper || ''} onChange={event => this.setCharacterProperty('copper', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Mithrill</div>
+                  <div className="align-self-end">
+                    <input type="number" value={character.mithrill || ''} onChange={event => this.setCharacterProperty('mithrill', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Egyéb</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.otherWealth || ''} onChange={event => this.setCharacterProperty('otherWealth', event.target.value)}/>
+                  </div>
+                </div>
+
+                <div className="separator">Felszerelések</div>
+
+                <table className={'table-sm table-striped w-100'}>
+                  <tr>
+                    <th>Felszerelés</th>
+                    <th>Mennyiség</th>
+                    <th>Elhelyezés</th>
+                    <th>Akció</th>
+                  </tr>
+                  {Object.keys(character.equipments || []).map(key => {
+                    const equipment = character.equipments[key];
+                    return (
+                      <tr>
+                        <td>
+                          <input className={'equipment-input'} type="text" value={equipment.name}
+                                 onChange={event => this.setCharacterProperty(`equipments.${key}.name`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'equipment-input'} type="text" value={equipment.quantity}
+                                 onChange={event => this.setCharacterProperty(`equipments.${key}.quantity`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'equipment-input'} type="text" value={equipment.placing}
+                                 onChange={event => this.setCharacterProperty(`equipments.${key}.placing`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <button type="button" className={'btn btn-sm btn-danger'} onClick={() => {
+                            const isConfirmed = window.confirm('Are you sure you want to remove this equipment?');
+                            if (isConfirmed) {
+                              this.removeEquipment(key)
+                            }
+                          }}>
+                            <i className={'bi bi-dash-circle-fill'}></i>
+                          </button>
+                        </td>
+                      </tr>
+                    )})}
+                </table>
+                <button type="button" className={'btn btn-secondary mt-2'} onClick={() => this.addEquipment()}>
+                  <i className={'bi bi-plus-circle-fill'}></i> Felszerelés hozzáadása
+                </button>
+              </div>
+              <div className={'panel'}>
+                <div className="separator">Jegyzetek</div>
+                <textarea className={'notes'} onChange={event => this.setCharacterProperty('notes', event.target.value)}>{character.notes || ''}</textarea>
+              </div>
             </ReactSwipe>
           </div>
         </div>
