@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e695d62498d922bd5dfb02b7d68c6585",
+    "revision": "427fae5e0fd8da5c0a9940d26344f91b",
     "url": "/magus-character/index.html"
   },
   {
-    "revision": "95590d949f222a756a5d",
-    "url": "/magus-character/static/css/main.05a6006d.chunk.css"
+    "revision": "a4e0c17cc8b500e7f12b",
+    "url": "/magus-character/static/css/main.1cbd4ba9.chunk.css"
   },
   {
-    "revision": "d35d1090d68ebef671e7",
-    "url": "/magus-character/static/js/2.8f59c8e1.chunk.js"
+    "revision": "c472701b086fc61f98cb",
+    "url": "/magus-character/static/js/2.bab662cd.chunk.js"
   },
   {
     "revision": "df74735b8cfd85c15b93036317d8dce6",
-    "url": "/magus-character/static/js/2.8f59c8e1.chunk.js.LICENSE.txt"
+    "url": "/magus-character/static/js/2.bab662cd.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "95590d949f222a756a5d",
-    "url": "/magus-character/static/js/main.d47e95a4.chunk.js"
+    "revision": "a4e0c17cc8b500e7f12b",
+    "url": "/magus-character/static/js/main.965d7b08.chunk.js"
   },
   {
     "revision": "7dbca55534f3ab87f6d6",
