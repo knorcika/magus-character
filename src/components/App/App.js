@@ -229,10 +229,10 @@ class App extends React.Component {
                       </div>
                       <div className="align-self-end">
                         {key !== this.state.characterIndex &&
-                          <button type="button" className={'btn btn-secondary'} onClick={() => this.selectCharacter(key)}>
+                          <button type="button" className={'btn btn-success'} onClick={() => this.selectCharacter(key)}>
                           <i className={'bi bi-check-circle-fill'}></i>
                         </button>}
-                        <button type="button" className={'btn btn-secondary ml-1'} onClick={() => {
+                        <button type="button" className={'btn btn-danger ml-1'} onClick={() => {
                           const isConfirmed = window.confirm('Are you sure you want to remove this character?');
                           if (isConfirmed) {
                             this.removeCharacter(key)
@@ -245,7 +245,7 @@ class App extends React.Component {
                   )
                 })}
                 <div>
-                  <button type="button" className={'btn btn-secondary'} onClick={() => this.createCharacter()}>
+                  <button type="button" className={'btn btn-primary'} onClick={() => this.createCharacter()}>
                     <i className={'bi bi-plus-circle-fill'}></i> Új karakter
                   </button>
                 </div>
@@ -647,7 +647,7 @@ class App extends React.Component {
                       </tr>
                     )})}
                 </table>
-                <button type="button" className={'btn btn-secondary mt-2'} onClick={() => this.addEducation()}>
+                <button type="button" className={'btn btn-primary mt-2'} onClick={() => this.addEducation()}>
                   <i className={'bi bi-plus-circle-fill'}></i> Képzettség hozzáadása
                 </button>
               </div>
@@ -723,7 +723,7 @@ class App extends React.Component {
                       </tr>
                     )})}
                 </table>
-                <button type="button" className={'btn btn-secondary mt-2'} onClick={() => this.addEquipment()}>
+                <button type="button" className={'btn btn-primary mt-2'} onClick={() => this.addEquipment()}>
                   <i className={'bi bi-plus-circle-fill'}></i> Felszerelés hozzáadása
                 </button>
               </div>
