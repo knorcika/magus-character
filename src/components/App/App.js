@@ -39,8 +39,8 @@ const initValues = {
     //   currentFp: 0,
     //   fpPerLevel: '',
     //
-    //   educationPoint: 0,
-    //   educations: [],
+    //   skillPoint: 0,
+    //   skills: [],
     //   weapons: [],
     //   mana: {},
     //
@@ -137,25 +137,25 @@ class App extends React.Component {
     this.setState({ characters }, this.storeStates);
   }
 
-  addEducation() {
+  addSkill() {
     let characters = [...this.state.characters];
-    const educationsPath = `${this.state.characterIndex}.educations`;
-    let educations = _.get(characters, educationsPath) || [];
-    educations.push({
+    const skillsPath = `${this.state.characterIndex}.skills`;
+    let skills = _.get(characters, skillsPath) || [];
+    skills.push({
       name: '',
       point: '',
       degree: ''
     });
-    _.set(characters, educationsPath, educations);
+    _.set(characters, skillsPath, skills);
     this.setState({ characters }, this.storeStates);
   }
 
-  removeEducation(key) {
+  removeSkill(key) {
     let characters = [...this.state.characters];
-    const educationsPath = `${this.state.characterIndex}.educations`;
-    let educations = _.get(characters, educationsPath) || [];
-    educations.splice(key, 1);
-    _.set(characters, educationsPath, educations);
+    const skillsPath = `${this.state.characterIndex}.skills`;
+    let skills = _.get(characters, skillsPath) || [];
+    skills.splice(key, 1);
+    _.set(characters, skillsPath, skills);
     this.setState({ characters }, this.storeStates);
   }
 
@@ -599,13 +599,13 @@ class App extends React.Component {
                 <div className={'d-flex justify-content-between'}>
                   <div className="align-self-start">KP/szint</div>
                   <div className="align-self-end">
-                    <input type="text" value={character.kpPerLevel || ''} onChange={event => this.setCharacterProperty('kpPerLevel', event.target.value)}/>
+                    <input type="text" value={character.skillPointPerLevel || ''} onChange={event => this.setCharacterProperty('skillPointPerLevel', event.target.value)}/>
                   </div>
                 </div>
                 <div className={'d-flex justify-content-between'}>
                   <div className="align-self-start">Jelenlegi KP</div>
                   <div className="align-self-end">
-                    <input type="text" value={character.currentKP || ''} onChange={event => this.setCharacterProperty('currentKP', event.target.value)}/>
+                    <input type="text" value={character.currentSkillPoint || ''} onChange={event => this.setCharacterProperty('currentSkillPoint', event.target.value)}/>
                   </div>
                 </div>
 
@@ -618,27 +618,27 @@ class App extends React.Component {
                     <th>Fok / %</th>
                     <th>Akció</th>
                   </tr>
-                  {Object.keys(character.educations || []).map(key => {
-                    const education = character.educations[key];
+                  {Object.keys(character.skills || []).map(key => {
+                    const skill = character.skills[key];
                     return (
                       <tr>
                         <td>
-                          <input className={'equipment-input'} type="text" value={education.name}
-                                 onChange={event => this.setCharacterProperty(`educations.${key}.name`, event.target.value)}/>
+                          <input className={'equipment-input'} type="text" value={skill.name}
+                                 onChange={event => this.setCharacterProperty(`skills.${key}.name`, event.target.value)}/>
                         </td>
                         <td>
-                          <input className={'equipment-input'} type="text" value={education.point}
-                                 onChange={event => this.setCharacterProperty(`educations.${key}.point`, event.target.value)}/>
+                          <input className={'equipment-input'} type="text" value={skill.point}
+                                 onChange={event => this.setCharacterProperty(`skills.${key}.point`, event.target.value)}/>
                         </td>
                         <td>
-                          <input className={'equipment-input'} type="text" value={education.degree}
-                                 onChange={event => this.setCharacterProperty(`educations.${key}.degree`, event.target.value)}/>
+                          <input className={'equipment-input'} type="text" value={skill.degree}
+                                 onChange={event => this.setCharacterProperty(`skills.${key}.degree`, event.target.value)}/>
                         </td>
                         <td>
                           <button type="button" className={'btn btn-sm btn-danger'} onClick={() => {
-                            const isConfirmed = window.confirm('Are you sure you want to remove this education?');
+                            const isConfirmed = window.confirm('Are you sure you want to remove this skill?');
                             if (isConfirmed) {
-                              this.removeEducation(key)
+                              this.removeSkill(key)
                             }
                           }}>
                             <i className={'bi bi-dash-circle-fill'}></i>
@@ -647,7 +647,7 @@ class App extends React.Component {
                       </tr>
                     )})}
                 </table>
-                <button type="button" className={'btn btn-primary mt-2'} onClick={() => this.addEducation()}>
+                <button type="button" className={'btn btn-primary mt-2'} onClick={() => this.addSkill()}>
                   <i className={'bi bi-plus-circle-fill'}></i> Képzettség hozzáadása
                 </button>
               </div>
