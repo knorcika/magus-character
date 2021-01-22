@@ -729,7 +729,7 @@ class App extends React.Component {
               </div>
               <div className={'panel'}>
                 <div className="separator">Jegyzetek</div>
-                <textarea className={'notes'} onChange={event => this.setCharacterProperty('notes', event.target.value)}>{character.notes || ''}</textarea>
+                <textarea className={'notes'} value={character.notes || ''} onChange={event => this.setCharacterProperty('notes', event.target.value)}/>
               </div>
             </ReactSwipe>
           </div>
