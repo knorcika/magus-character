@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "427fae5e0fd8da5c0a9940d26344f91b",
+    "revision": "7b50fea2bfa286b7af47adbfa8c57f2b",
     "url": "/magus-character/index.html"
   },
   {
-    "revision": "a4e0c17cc8b500e7f12b",
+    "revision": "d56a1d1a5b51081d40e3",
     "url": "/magus-character/static/css/main.1cbd4ba9.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/magus-character/static/js/2.bab662cd.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a4e0c17cc8b500e7f12b",
-    "url": "/magus-character/static/js/main.965d7b08.chunk.js"
+    "revision": "d56a1d1a5b51081d40e3",
+    "url": "/magus-character/static/js/main.60f54ffa.chunk.js"
   },
   {
     "revision": "7dbca55534f3ab87f6d6",
