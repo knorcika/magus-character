@@ -159,6 +159,24 @@ class App extends React.Component {
     this.setState({ characters }, this.storeStates);
   }
 
+  addWeapon() {
+    let characters = [...this.state.characters];
+    const weaponsPath = `${this.state.characterIndex}.weapons`;
+    let weapons = _.get(characters, weaponsPath) || [];
+    weapons.push({});
+    _.set(characters, weaponsPath, weapons);
+    this.setState({ characters }, this.storeStates);
+  }
+
+  removeWeapon(key) {
+    let characters = [...this.state.characters];
+    const weaponsPath = `${this.state.characterIndex}.weapons`;
+    let weapons = _.get(characters, weaponsPath) || [];
+    weapons.splice(key, 1);
+    _.set(characters, weaponsPath, weapons);
+    this.setState({ characters }, this.storeStates);
+  }
+
 	render() {
     let reactSwipeEl;
 
@@ -189,7 +207,7 @@ class App extends React.Component {
               </li>
               <li className="nav-item">
                 <div className={`nav-link ${this.state.menuIndex === 2 ? 'active' : ''}`} onClick={() => reactSwipeEl.slide(2, 300)}>
-                  <i className={'bi bi-lightning-fill'}></i>
+                  <i className={'bi bi-joystick'}></i>
                 </div>
               </li>
               <li className="nav-item">
@@ -591,7 +609,188 @@ class App extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className={'panel'}>Fegyverek</div>
+              <div className={'panel'}>
+                <div className="separator">Fegyverek</div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Pont/Szint</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.weaponPointPerLevel || ''} onChange={event => this.setCharacterProperty('weaponPointPerLevel', event.target.value)}/>
+                  </div>
+                </div>
+
+                <table className={'table-sm table-striped w-100'}>
+                  <thead>
+                    <tr>
+                      <th>Név</th>
+                      <th>KÉ</th>
+                      <th>TÉ</th>
+                      <th>VÉ</th>
+                      <th>CÉ</th>
+                      <th>Sebzés</th>
+                      <th>Akció</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>Alap</td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.baseStartValue}
+                             onChange={event => this.setCharacterProperty(`baseStartValue`, event.target.value)}/>
+                    </td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.baseAttackValue}
+                             onChange={event => this.setCharacterProperty(`baseAttackValue`, event.target.value)}/>
+                    </td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.baseDefenseValue}
+                             onChange={event => this.setCharacterProperty(`baseDefenseValue`, event.target.value)}/>
+                    </td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.baseAimingValue}
+                             onChange={event => this.setCharacterProperty(`baseAimingValue`, event.target.value)}/>
+                    </td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+
+                  {Object.keys(character.weapons || []).map(key => {
+                    return (
+                      <tr key={key}>
+                        <td>
+                          <input className={'weapon-input'} type="text" value={character.weapons[key].name || ''}
+                                 onChange={event => this.setCharacterProperty(`weapons.${key}.name`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'weapon-input'} type="number" value={character.weapons[key].startValue || ''}
+                                 onChange={event => this.setCharacterProperty(`weapons.${key}.startValue`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'weapon-input'} type="number" value={character.weapons[key].attackValue || ''}
+                                 onChange={event => this.setCharacterProperty(`weapons.${key}.attackValue`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'weapon-input'} type="number" value={character.weapons[key].defenseValue || ''}
+                                 onChange={event => this.setCharacterProperty(`weapons.${key}.defenseValue`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'weapon-input'} type="number" value={character.weapons[key].aimingValue || ''}
+                                 onChange={event => this.setCharacterProperty(`weapons.${key}.aimingValue`, event.target.value)}/>
+                        </td>
+                        <td>
+                          <input className={'weapon-input'} type="text" value={character.weapons[key].damage || ''}
+                                 onChange={event => this.setCharacterProperty(`weapons.${key}.damage`, event.target.value)}/>
+                        </td>
+                        <td className={'text-right'}>
+                          <div className={'btn-group'} role="group">
+                            {key !== character.weaponIndex &&
+                            <button type="button" className={'btn btn-success'} onClick={() => this.setCharacterProperty('weaponIndex', key)}>
+                              <i className={'bi bi-check-circle-fill'}></i>
+                            </button>}
+                            <button type="button" className={'btn btn-danger'} onClick={() => {
+                              const isConfirmed = window.confirm('Are you sure you want to remove this weapon?');
+                              if (isConfirmed) {
+                                this.removeWeapon(key)
+                              }
+                            }}>
+                              <i className={'bi bi-dash-circle-fill'}></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
+
+                  <tr>
+                    <td>Módosító</td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.modStartValue}
+                             onChange={event => this.setCharacterProperty(`modStartValue`, event.target.value)}/>
+                    </td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.modAttackValue}
+                             onChange={event => this.setCharacterProperty(`modAttackValue`, event.target.value)}/>
+                    </td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.modDefenseValue}
+                             onChange={event => this.setCharacterProperty(`modDefenseValue`, event.target.value)}/>
+                    </td>
+                    <td>
+                      <input className={'weapon-input'} type="number" value={character.modAimingValue}
+                             onChange={event => this.setCharacterProperty(`modAimingValue`, event.target.value)}/>
+                    </td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Összesen</th>
+                    <th>
+                      {
+                        (parseInt(character.baseStartValue) || 0) +
+                        (parseInt(character.modStartValue) || 0) +
+                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].startValue) || 0) : 0)
+                      }
+                    </th>
+                    <th>
+                      {
+                        (parseInt(character.baseAttackValue) || 0) +
+                        (parseInt(character.modAttackValue) || 0) +
+                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].attackValue) || 0) : 0)
+                      }
+                    </th>
+                    <th>
+                      {
+                        (parseInt(character.baseDefenseValue) || 0) +
+                        (parseInt(character.modDefenseValue) || 0) +
+                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].defenseValue) || 0) : 0)
+                      }
+                    </th>
+                    <th>
+                      {
+                        (parseInt(character.baseAimingValue) || 0) +
+                        (parseInt(character.modAimingValue) || 0) +
+                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].aimingValue) || 0) : 0)
+                      }
+                    </th>
+                    <th>
+                      {(character.weapons[character.weaponIndex] ? character.weapons[character.weaponIndex].damage || '' : '')}
+                    </th>
+                    <th></th>
+                  </tr>
+                  </tfoot>
+                </table>
+                <button type="button" className={'btn btn-primary mt-2'} onClick={() => this.addWeapon()}>
+                  <i className={'bi bi-plus-circle-fill'}></i> Fegyver hozzáadása
+                </button>
+
+                <div className="separator">Mana</div>
+
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Szintenként</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.manaPerLevel || ''} onChange={event => this.setCharacterProperty('manaPerLevel', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Aktuális</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.currentMana || ''} onChange={event => this.setCharacterProperty('currentMana', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Maximum</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.maxMana || ''} onChange={event => this.setCharacterProperty('maxMana', event.target.value)}/>
+                  </div>
+                </div>
+                <div className={'d-flex justify-content-between'}>
+                  <div className="align-self-start">Feltöltés</div>
+                  <div className="align-self-end">
+                    <input type="text" value={character.manaRecharge || ''} onChange={event => this.setCharacterProperty('manaRecharge', event.target.value)}/>
+                  </div>
+                </div>
+              </div>
               <div className={'panel'}>
 
                 <div className="separator">Képzettség pontok</div>
@@ -612,40 +811,45 @@ class App extends React.Component {
                 <div className="separator">Képzettségek</div>
 
                 <table className={'table-sm table-striped w-100'}>
-                  <tr>
-                    <th>Képzettség</th>
-                    <th>Pont</th>
-                    <th>Fok / %</th>
-                    <th>Akció</th>
-                  </tr>
-                  {Object.keys(character.skills || []).map(key => {
-                    const skill = character.skills[key];
-                    return (
-                      <tr>
-                        <td>
-                          <input className={'equipment-input'} type="text" value={skill.name}
-                                 onChange={event => this.setCharacterProperty(`skills.${key}.name`, event.target.value)}/>
-                        </td>
-                        <td>
-                          <input className={'equipment-input'} type="text" value={skill.point}
-                                 onChange={event => this.setCharacterProperty(`skills.${key}.point`, event.target.value)}/>
-                        </td>
-                        <td>
-                          <input className={'equipment-input'} type="text" value={skill.degree}
-                                 onChange={event => this.setCharacterProperty(`skills.${key}.degree`, event.target.value)}/>
-                        </td>
-                        <td>
-                          <button type="button" className={'btn btn-sm btn-danger'} onClick={() => {
-                            const isConfirmed = window.confirm('Are you sure you want to remove this skill?');
-                            if (isConfirmed) {
-                              this.removeSkill(key)
-                            }
-                          }}>
-                            <i className={'bi bi-dash-circle-fill'}></i>
-                          </button>
-                        </td>
-                      </tr>
-                    )})}
+                  <thead>
+                    <tr>
+                      <th>Képzettség</th>
+                      <th>Pont</th>
+                      <th>Fok / %</th>
+                      <th>Akció</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(character.skills || []).map(key => {
+                      const skill = character.skills[key];
+                      return (
+                        <tr key={key}>
+                          <td>
+                            <input className={'equipment-input'} type="text" value={skill.name}
+                                   onChange={event => this.setCharacterProperty(`skills.${key}.name`, event.target.value)}/>
+                          </td>
+                          <td>
+                            <input className={'equipment-input'} type="text" value={skill.point}
+                                   onChange={event => this.setCharacterProperty(`skills.${key}.point`, event.target.value)}/>
+                          </td>
+                          <td>
+                            <input className={'equipment-input'} type="text" value={skill.degree}
+                                   onChange={event => this.setCharacterProperty(`skills.${key}.degree`, event.target.value)}/>
+                          </td>
+                          <td>
+                            <button type="button" className={'btn btn-sm btn-danger'} onClick={() => {
+                              const isConfirmed = window.confirm('Are you sure you want to remove this skill?');
+                              if (isConfirmed) {
+                                this.removeSkill(key)
+                              }
+                            }}>
+                              <i className={'bi bi-dash-circle-fill'}></i>
+                            </button>
+                          </td>
+                        </tr>
+                      )})}
+                  </tbody>
+
                 </table>
                 <button type="button" className={'btn btn-primary mt-2'} onClick={() => this.addSkill()}>
                   <i className={'bi bi-plus-circle-fill'}></i> Képzettség hozzáadása
@@ -688,40 +892,44 @@ class App extends React.Component {
                 <div className="separator">Felszerelések</div>
 
                 <table className={'table-sm table-striped w-100'}>
-                  <tr>
-                    <th>Felszerelés</th>
-                    <th>Mennyiség</th>
-                    <th>Elhelyezés</th>
-                    <th>Akció</th>
-                  </tr>
-                  {Object.keys(character.equipments || []).map(key => {
-                    const equipment = character.equipments[key];
-                    return (
-                      <tr>
-                        <td>
-                          <input className={'equipment-input'} type="text" value={equipment.name}
-                                 onChange={event => this.setCharacterProperty(`equipments.${key}.name`, event.target.value)}/>
-                        </td>
-                        <td>
-                          <input className={'equipment-input'} type="text" value={equipment.quantity}
-                                 onChange={event => this.setCharacterProperty(`equipments.${key}.quantity`, event.target.value)}/>
-                        </td>
-                        <td>
-                          <input className={'equipment-input'} type="text" value={equipment.placing}
-                                 onChange={event => this.setCharacterProperty(`equipments.${key}.placing`, event.target.value)}/>
-                        </td>
-                        <td>
-                          <button type="button" className={'btn btn-sm btn-danger'} onClick={() => {
-                            const isConfirmed = window.confirm('Are you sure you want to remove this equipment?');
-                            if (isConfirmed) {
-                              this.removeEquipment(key)
-                            }
-                          }}>
-                            <i className={'bi bi-dash-circle-fill'}></i>
-                          </button>
-                        </td>
-                      </tr>
-                    )})}
+                  <thead>
+                    <tr>
+                      <th>Felszerelés</th>
+                      <th>Mennyiség</th>
+                      <th>Elhelyezés</th>
+                      <th>Akció</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(character.equipments || []).map(key => {
+                      const equipment = character.equipments[key];
+                      return (
+                        <tr key={key}>
+                          <td>
+                            <input className={'equipment-input'} type="text" value={equipment.name}
+                                   onChange={event => this.setCharacterProperty(`equipments.${key}.name`, event.target.value)}/>
+                          </td>
+                          <td>
+                            <input className={'equipment-input'} type="text" value={equipment.quantity}
+                                   onChange={event => this.setCharacterProperty(`equipments.${key}.quantity`, event.target.value)}/>
+                          </td>
+                          <td>
+                            <input className={'equipment-input'} type="text" value={equipment.placing}
+                                   onChange={event => this.setCharacterProperty(`equipments.${key}.placing`, event.target.value)}/>
+                          </td>
+                          <td>
+                            <button type="button" className={'btn btn-sm btn-danger'} onClick={() => {
+                              const isConfirmed = window.confirm('Are you sure you want to remove this equipment?');
+                              if (isConfirmed) {
+                                this.removeEquipment(key)
+                              }
+                            }}>
+                              <i className={'bi bi-dash-circle-fill'}></i>
+                            </button>
+                          </td>
+                        </tr>
+                      )})}
+                  </tbody>
                 </table>
                 <button type="button" className={'btn btn-primary mt-2'} onClick={() => this.addEquipment()}>
                   <i className={'bi bi-plus-circle-fill'}></i> Felszerelés hozzáadása
