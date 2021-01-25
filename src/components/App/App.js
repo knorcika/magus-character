@@ -180,7 +180,7 @@ class App extends React.Component {
   add(obj, ...paths) {
     let sum = 0;
     for (let path of paths) {
-      sum += _.get(obj, path) || 0;
+      sum += parseInt(_.get(obj, path)) || 0;
     }
     return sum;
   }
