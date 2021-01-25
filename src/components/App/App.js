@@ -177,6 +177,14 @@ class App extends React.Component {
     this.setState({ characters }, this.storeStates);
   }
 
+  add(obj, ...paths) {
+    let sum = 0;
+    for (let path of paths) {
+      sum += _.get(obj, path) || 0;
+    }
+    return sum;
+  }
+
 	render() {
     let reactSwipeEl;
 
@@ -727,34 +735,26 @@ class App extends React.Component {
                     <th>Összesen</th>
                     <th>
                       {
-                        (parseInt(character.baseStartValue) || 0) +
-                        (parseInt(character.modStartValue) || 0) +
-                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].startValue) || 0) : 0)
+                        this.add(character, 'baseStartValue', 'modStartValue', `weapons.${character.weaponIndex}.startValue`)
                       }
                     </th>
                     <th>
                       {
-                        (parseInt(character.baseAttackValue) || 0) +
-                        (parseInt(character.modAttackValue) || 0) +
-                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].attackValue) || 0) : 0)
+                        this.add(character, 'baseAttackValue', 'modAttackValue', `weapons.${character.weaponIndex}.attackValue`)
                       }
                     </th>
                     <th>
                       {
-                        (parseInt(character.baseDefenseValue) || 0) +
-                        (parseInt(character.modDefenseValue) || 0) +
-                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].defenseValue) || 0) : 0)
+                        this.add(character, 'baseDefenseValue', 'modDefenseValue', `weapons.${character.weaponIndex}.defenseValue`)
                       }
                     </th>
                     <th>
                       {
-                        (parseInt(character.baseAimingValue) || 0) +
-                        (parseInt(character.modAimingValue) || 0) +
-                        (character.weapons[character.weaponIndex] ? (parseInt(character.weapons[character.weaponIndex].aimingValue) || 0) : 0)
+                        this.add(character, 'baseAimingValue', 'modAimingValue', `weapons.${character.weaponIndex}.aimingValue`)
                       }
                     </th>
                     <th>
-                      {(character.weapons[character.weaponIndex] ? character.weapons[character.weaponIndex].damage || '' : '')}
+                      {(character && character.weapons && character.weaponIndex >= 0 && character.weapons[character.weaponIndex] ? character.weapons[character.weaponIndex].damage || '' : '')}
                     </th>
                     <th></th>
                   </tr>
